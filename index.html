@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android File Inspector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.6;
+      background: #f5f7fa;
+      color: #202733;
+    }
+
+    h1 {
+      color: #155eef;
+    }
+
+    button, input {
+      padding: 12px;
+      margin: 8px 0;
+    }
+
+    .notice {
+      padding: 12px;
+      border: 1px solid #b8c9e8;
+      border-radius: 8px;
+      background: white;
+    }
+
+    li {
+      margin: 12px 0;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <h1>Android File Inspector</h1>
+
+  <p class="notice">
+    This tool inspects only files you choose.
+    It does not scan your entire phone or upload file contents.
+  </p>
+
+  <p>
+    Select files you own or are authorized to inspect.
+    Your browser will open its built-in file picker.
+  </p>
+
+  <label for="files">Choose files to inspect:</label>
+  <br>
+  <input id="files" type="file" multiple>
+
+  <h2>Inspection results</h2>
+  <p id="count">No files selected.</p>
+  <ul id="results"></ul>
+
+  <script>
+    const picker = document.getElementById("files");
+    const results = document.getElementById("results");
+    const count = document.getElementById("count");
+
+    picker.addEventListener("change", () => {
+      results.replaceChildren();
+
+      const files = picker.files;
+
+      if (files.length === 0) {
+        count.textContent = "No files selected.";
+        return;
+      }
+
+      count.textContent =
+        `${files.length} file(s) selected for inspection.`;
+
+      for (const file of files) {
+        const item = document.createElement("li");
+
+        item.textContent =
+          `Name: ${file.name} | ` +
+          `Type: ${file.type || "Unknown"} | ` +
+          `Size: ${file.size} bytes`;
+
+        results.appendChild(item);
+      }
+    });
+  </script>
+</body>
+</html>
