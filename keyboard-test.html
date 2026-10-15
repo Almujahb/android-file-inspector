@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keyboard Event Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    textarea {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 140px;
+      padding: 12px;
+      font-size: 18px;
+    }
+
+    button {
+      padding: 10px 14px;
+      margin: 8px 6px 8px 0;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: #f0f0f0;
+      padding: 12px;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Keyboard Event Test</h1>
+
+  <p>
+    Type only sample text in the box below.
+    Your input stays in this page and is not uploaded.
+  </p>
+
+  <label for="typingBox">Test text box</label>
+  <textarea id="typingBox"
+    placeholder="Type a test message here..."></textarea>
+
+  <p id="status" aria-live="polite">Waiting for input.</p>
+
+  <h2>Recorded input</h2>
+  <pre id="output">(Nothing entered yet)</pre>
+
+  <button id="copyButton" type="button">Copy result</button>
+  <button id="clearButton" type="button">Clear test</button>
+
+  <script>
+    const typingBox = document.getElementById("typingBox");
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
+    const copyButton = document.getElementById("copyButton");
+    const clearButton = document.getElementById("clearButton");
+
+    function updateResult() {
+      output.textContent =
+        typingBox.value || "(Nothing entered yet)";
+      status.textContent =
+        typingBox.value.length + " characters in the test box.";
+    }
+
+    typingBox.addEventListener("input", updateResult);
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(typingBox.value);
+        status.textContent = "Test text copied.";
+      } catch {
+        status.textContent =
+          "Copy unavailable. Select the displayed result manually.";
+      }
+    });
+
+    clearButton.addEventListener("click", () => {
+      typingBox.value = "";
+      updateResult();
+      typingBox.focus();
+    });
+  </script>
+</body>
+</html>
