@@ -1,10 +1,11 @@
-
+```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Android File Inspector</title>
+  <title>Android File Inspector and Typing Test</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,16 +21,30 @@
       color: #155eef;
     }
 
-    button, input {
+    button, input, textarea {
       padding: 12px;
       margin: 8px 0;
     }
 
-    .notice {
+    button {
+      cursor: pointer;
+    }
+
+    .notice, .test-box {
       padding: 12px;
       border: 1px solid #b8c9e8;
       border-radius: 8px;
       background: white;
+    }
+
+    textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      border: 1px solid #888;
+      border-radius: 6px;
     }
 
     li {
@@ -38,6 +53,7 @@
     }
   </style>
 </head>
+
 <body>
   <h1>Android File Inspector</h1>
 
@@ -59,7 +75,44 @@
   <p id="count">No files selected.</p>
   <ul id="results"></ul>
 
+  <hr>
+
+  <h1>Android Typing Test</h1>
+
+  <p class="notice">
+    Test your Android keyboard by typing in the box below.
+    Text stays in this page and is not saved or uploaded.
+  </p>
+
+  <div class="test-box">
+    <label for="typingTest">Type your test message here:</label>
+
+    <textarea
+      id="typingTest"
+      rows="5"
+      placeholder="Tap here to open your phone keyboard..."
+      autocomplete="off"
+      autocapitalize="sentences"
+      spellcheck="false"
+    ></textarea>
+
+    <p>
+      Characters typed:
+      <strong id="charCount">0</strong>
+    </p>
+
+    <p>
+      Words typed:
+      <strong id="wordCount">0</strong>
+    </p>
+
+    <button type="button" id="clearTyping">
+      Clear test
+    </button>
+  </div>
+
   <script>
+    // Existing file inspection feature
     const picker = document.getElementById("files");
     const results = document.getElementById("results");
     const count = document.getElementById("count");
@@ -88,6 +141,32 @@
         results.appendChild(item);
       }
     });
+
+    // New typing test feature
+    const typingBox = document.getElementById("typingTest");
+    const charCount = document.getElementById("charCount");
+    const wordCount = document.getElementById("wordCount");
+    const clearButton = document.getElementById("clearTyping");
+
+    typingBox.addEventListener("input", () => {
+      const text = typingBox.value;
+
+      charCount.textContent = text.length;
+
+      const trimmedText = text.trim();
+
+      wordCount.textContent = trimmedText
+        ? trimmedText.split(/\s+/).length
+        : 0;
+    });
+
+    clearButton.addEventListener("click", () => {
+      typingBox.value = "";
+      charCount.textContent = "0";
+      wordCount.textContent = "0";
+      typingBox.focus();
+    });
   </script>
 </body>
 </html>
+```
